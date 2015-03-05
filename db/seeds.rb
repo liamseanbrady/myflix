@@ -5,6 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+categories = Category.create([{ name: 'TV Comedies' }, { name: 'TV Dramas' }])
+
 videos = {
   'Futurama' => <<-HERE_DOC,
     Phillip Fry is a 25-year-old pizza delivery boy whose life is
@@ -39,6 +42,6 @@ videos = {
 
 videos.each do |title, description|
   large_cover = (title == 'Monk' ? 'large_' : '')
-  Video.create(title: title, description: description, small_cover_url: "/tmp/#{title.parameterize.underscore}.jpg", large_cover_url: "/tmp/#{large_cover}#{title.parameterize.underscore}.jpg")
+  Video.create(title: title, description: description, small_cover_url: "/tmp/#{title.parameterize.underscore}.jpg", large_cover_url: "/tmp/#{large_cover}#{title.parameterize.underscore}.jpg", category: categories.sample)
 end
 
