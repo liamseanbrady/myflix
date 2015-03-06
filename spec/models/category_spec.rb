@@ -1,13 +1,6 @@
 require 'spec_helper'
 
 describe Category do
-  it 'saves itself' do
-    category = Category.new(name: 'Comedies')
-    category.save
-
-    expect(Category.first).to eq(category)
-  end
-
   it 'has many videos' do
     sci_fi = Category.create(name: 'Sci-fi')
 
