@@ -8,6 +8,6 @@ class VideosController < ApplicationController
   end
 
   def search
-    @videos = Video.search_by_title(params[:term])
+    @results = Video.search_by_title(params[:search_term])
   end
 end
