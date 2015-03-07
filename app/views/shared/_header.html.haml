@@ -7,7 +7,7 @@
     %li= link_to "People"
   =form_tag search_videos_path, method: 'get', class: 'col-md-5 navbar-form' do
     .form-group
-      %input.form-control(type="text" name="search_term" placeholder="Search for videos here")
+      =text_field_tag 'search_term', '', placeholder: 'Search for videos here', class: 'form-control'
     %button.btn.btn-default(type="submit") Search
   #user_links.pull-right
     %ul
