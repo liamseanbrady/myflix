@@ -9,7 +9,7 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'jquery-rails'
 gem 'pg'
-gem 'bcrypt-ruby'
+gem 'bcrypt-ruby', '~> 3.1.0'
 
 group :development do
   gem 'thin'
