@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
+  helper_method :current_user, :logged_in?
+  
   add_flash_types :danger
   
   def require_user
