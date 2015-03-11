@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   
   helper_method :current_user, :logged_in?
   
-  add_flash_types :danger
+  add_flash_types :danger, :success
   
   def require_user
     flash[:danger] = "You don't have permission to do that"
