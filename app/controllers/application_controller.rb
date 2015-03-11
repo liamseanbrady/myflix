@@ -2,4 +2,16 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   
   add_flash_types :danger
+  
+  def require_user
+    redirect_to sign_in_path unless logged_in?
+  end
+
+  def logged_in?
+    !!current_user
+  end
+
+  def current_user
+    @current_user ||= User.find(seesion[:user_id]) if session[:user_id]
+  end
 end
