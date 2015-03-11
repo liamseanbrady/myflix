@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
 
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to home_path, notice: 'You are signed in. Enjoy!'
+      redirect_to home_path, success: 'You are signed in. Enjoy!'
     else
       redirect_to sign_in_path, danger: 'Invalid email or password.'
     end
@@ -16,6 +16,6 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
-    redirect_to root_path, notice: 'You are signed out'
+    redirect_to root_path, success: 'You are signed out'
   end
 end
