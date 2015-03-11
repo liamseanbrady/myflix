@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   add_flash_types :danger
   
   def require_user
+    flash[:danger] = "You don't have permission to do that"
     redirect_to sign_in_path unless logged_in?
   end
 
