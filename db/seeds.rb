@@ -6,6 +6,8 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+User.create(full_name: 'Anon', email: 'anon@example.com', password: 'password')
+
 categories = Category.create([{ name: 'TV Comedies' }, { name: 'TV Dramas' }])
 
 videos = {
@@ -41,7 +43,9 @@ videos = {
   }
 
 videos.each do |title, description|
-  large_cover = (title == 'Monk' ? 'large_' : '')
-  Video.create(title: title, description: description, small_cover_url: "/tmp/#{title.parameterize.underscore}.jpg", large_cover_url: "/tmp/#{large_cover}#{title.parameterize.underscore}.jpg", category: categories.sample)
+  3.times do
+    large_cover = (title == 'Monk' ? 'large_' : '')
+    Video.create(title: title, description: description, small_cover_url: "/tmp/#{title.parameterize.underscore}.jpg", large_cover_url: "/tmp/#{large_cover}#{title.parameterize.underscore}.jpg", category: categories.sample)
+  end
 end
 
