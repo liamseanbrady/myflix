@@ -4,6 +4,7 @@ describe Video do
   it { is_expected.to belong_to(:category) }
   it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_presence_of(:description) }
+  it { is_expected.to have_many(:reviews) }
 
   describe '.search_by_title' do
     it 'returns an empty array if there is no match' do
