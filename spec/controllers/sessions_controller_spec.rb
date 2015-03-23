@@ -33,7 +33,7 @@ describe SessionsController do
       end
 
       it 'sets the flash success message' do
-        expect(flash[:success]).not_to be_nil
+        expect(flash[:success]).not_to be_blank
       end
     end
 
@@ -48,10 +48,35 @@ describe SessionsController do
         expect(session[:user_id]).to be_nil
       end
       it 'sets the flash danger message' do
-        expect(flash[:danger]).not_to be_nil
+        expect(flash[:danger]).not_to be_blank
       end
       it 'redirects to the sign in page' do
         expect(response).to redirect_to sign_in_path
+      end
+    end
+  end
+
+  describe 'GET destroy' do
+    context 'for authenticated users' do
+      before do
+        session[:user_id] = Fabricate(:user).id
+      end
+
+      it 'redirects to the sign in page' do
+        get :destroy
+
+        expect(response).to redirect_to sign_in_path
+      end
+      
+      it 'sets the user in the session to nil' do
+        get :destroy
+
+        expect(session[:user_id]).to be_nil
+      end
+      it 'sets the flash success message' do
+        get :destroy
+        
+        expect(flash[:success]).not_to be_blank
       end
     end
   end
