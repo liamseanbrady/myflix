@@ -1,6 +1,21 @@
 require 'spec_helper'
 
 describe SessionsController do
+  describe 'GET new' do
+    it 'renders :new template for unauthenticated users' do
+      get :new
+
+      expect(response).to render_template :new
+    end
+    it 'redirects_to home path for authenticated users' do
+      session[:user_id] = Fabricate(:user).id
+
+      get :new
+
+      expect(response).to redirect_to home_path
+    end
+  end
+
   describe 'POST create' do
     context 'with valid credentials' do
       let(:alice) { Fabricate(:user) }
