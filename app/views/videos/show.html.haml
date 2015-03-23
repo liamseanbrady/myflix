@@ -9,3 +9,41 @@
           %span Rating: 4.5/5.0
         %p= @video.description
 
+        .actions
+          %a.btn.btn-primary(href="") Watch Now
+          %a.btn.btn-default(href="") + My Queue
+
+%section.reviews.container
+  .row
+    .col-sm-10.col-sm-offset-1
+      = form_for [@video, Review.new] do |f|
+        %fieldset
+          .form-group
+            = f.label :rating, 'Rate this video'
+            .row
+              .col-sm-3
+                %select.form-control(name="")
+                  %option(value="5") 5 Stars
+                  %option(value="4") 4 Stars
+                  %option(value="3") 3 Stars
+                  %option(value="2") 2 Stars
+                  %option(value="1") 1 Star
+          .form-group
+            = f.label :content, 'Write Review'
+            .row
+              .col-sm-8
+                = f.text_area :content, rows: 6, class: 'form-control'
+        %fieldset.form-group.actions.clearfix
+          = f.submit 'Submit', class: 'btn'
+          = link_to 'Cancel', ''
+      %header
+        %h3 User Reviews (#{@reviews.count})
+      %ul
+        - @reviews.each do |review|
+          %article.review
+            %li.row
+              .col-sm-2
+                %span Rating: #{review.rating} / 5
+                %p= link_to "by #{review.author}", user_path(review.author)
+              .col-sm-8
+                %p= review.content
