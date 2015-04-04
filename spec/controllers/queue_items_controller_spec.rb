@@ -94,6 +94,16 @@ describe QueueItemsController do
         expect(QueueItem.count).to eq(0)
       end
 
+      it 'normalizes the remaining queue items' do
+        queue_item_one = Fabricate(:queue_item, user: alice, position: 1)
+        queue_item_two = Fabricate(:queue_item, user: alice, position: 2)
+        queue_item_three = Fabricate(:queue_item, user: alice, position: 3)
+
+        delete :destroy, id: queue_item_two.id
+
+        expect(alice.queue_items.map(&:position)).to eq([1, 2])
+      end
+
       it 'does not remove the queue item if the current user does not own it' do
         queue_item = Fabricate(:queue_item, user: Fabricate(:user))
         
