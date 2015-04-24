@@ -38,7 +38,6 @@ describe SessionsController do
 
     context 'with invalid credentials' do
       let(:alice) { Fabricate(:user) }
-
       before do
         post :create, email: alice.email, password: alice.password + 'adsdf'
       end
