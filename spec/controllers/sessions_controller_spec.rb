@@ -7,6 +7,7 @@ describe SessionsController do
 
       expect(response).to render_template :new
     end
+
     it 'redirects_to home path for authenticated users' do
       set_current_user
 
@@ -45,9 +46,11 @@ describe SessionsController do
       it 'does not set the session for the user' do
         expect(session[:user_id]).to be_nil
       end
+
       it 'sets the flash danger message' do
         expect(flash[:danger]).not_to be_blank
       end
+
       it 'redirects to the sign in page' do
         expect(response).to redirect_to sign_in_path
       end
@@ -69,6 +72,7 @@ describe SessionsController do
 
         expect(session[:user_id]).to be_nil
       end
+
       it 'sets the flash success message' do
         get :destroy
         

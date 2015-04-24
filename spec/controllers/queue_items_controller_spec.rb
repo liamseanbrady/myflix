@@ -13,10 +13,8 @@ describe QueueItemsController do
       expect(assigns(:queue_items)).to match_array([queue_item_one, queue_item_two])
     end
 
-    it 'redirects to sign in path for unauthenticated users' do
-      get :index
-
-      expect(response).to redirect_to sign_in_path
+    it_behaves_like 'requires sign in' do
+      let(:action) { get :index }
     end
   end
   
@@ -75,6 +73,10 @@ describe QueueItemsController do
         expect(response).to redirect_to my_queue_path
       end
     end
+
+    it_behaves_like 'requires sign in' do
+      let(:action) { post :create, video_id: 3 }
+    end
   end
 
   describe 'DELETE destroy' do
@@ -117,18 +119,13 @@ describe QueueItemsController do
       end
     end
     
-    context 'for unauthenticated users' do
-      it 'redirects to sign in page' do
-        delete :destroy, id: 1
-
-        expect(response).to redirect_to sign_in_path
-      end
+    it_behaves_like 'requires sign in' do
+      let(:action) { delete :destroy, id: 1 }
     end
   end
 
   describe 'POST update_queue' do
     context 'with valid input' do
-
       let(:alice) { Fabricate(:user) }
       let(:video) { Fabricate(:video) }
       let(:queue_item_one) { Fabricate(:queue_item, user: alice, position: 1, video: video) }
@@ -153,8 +150,8 @@ describe QueueItemsController do
         expect(alice.queue_items.map(&:position)).to eq([1, 2])
       end
     end
-    context 'with invalid input' do
 
+    context 'with invalid input' do
       let(:alice) { Fabricate(:user) }
       let(:video) { Fabricate(:video) }
       let(:queue_item_one) { Fabricate(:queue_item, user: alice, position: 1, video: video) }
@@ -180,11 +177,9 @@ describe QueueItemsController do
       end
     end
 
-    context 'for unauthenticated users' do
-      it 'redirects to the sign in page' do
+    it_behaves_like 'requires sign in' do
+      let(:action) do
         post :update_queue, queue_items: [{ id: 1, position: 3 }, { id: 2, position: 2 }]
-
-        expect(response).to redirect_to sign_in_path
       end
     end
 

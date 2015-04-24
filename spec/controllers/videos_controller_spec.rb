@@ -21,11 +21,9 @@ describe VideosController do
 
       expect(assigns(:reviews)).to match_array([review_one, review_two])
     end
-    
-    it 'redirects to sign in path for unauthenticated users' do
-      get :show, id: Fabricate(:video).id
-      
-      expect(response).to redirect_to sign_in_path
+
+    it_behaves_like 'requires sign in' do
+      let(:action) { get :show, id: Fabricate(:video).id }
     end
   end
 
@@ -39,10 +37,8 @@ describe VideosController do
       expect(assigns(:results)).to match_array([video])
     end
 
-    it 'redirects to sign in path for unauthenticated users' do
-      get :search, search_term: ''
-      
-      expect(response).to redirect_to sign_in_path
+    it_behaves_like 'requires sign in' do
+      let(:action) { get :search, search_term: '' }
     end
   end
 end
