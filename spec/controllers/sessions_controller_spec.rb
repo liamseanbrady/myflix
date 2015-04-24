@@ -7,8 +7,9 @@ describe SessionsController do
 
       expect(response).to render_template :new
     end
+
     it 'redirects_to home path for authenticated users' do
-      session[:user_id] = Fabricate(:user).id
+      set_current_user
 
       get :new
 
@@ -19,7 +20,6 @@ describe SessionsController do
   describe 'POST create' do
     context 'with valid credentials' do
       let(:alice) { Fabricate(:user) }
-
       before do
         post :create, email: alice.email, password: alice.password 
       end
@@ -39,7 +39,6 @@ describe SessionsController do
 
     context 'with invalid credentials' do
       let(:alice) { Fabricate(:user) }
-
       before do
         post :create, email: alice.email, password: alice.password + 'adsdf'
       end
@@ -47,9 +46,11 @@ describe SessionsController do
       it 'does not set the session for the user' do
         expect(session[:user_id]).to be_nil
       end
+
       it 'sets the flash danger message' do
         expect(flash[:danger]).not_to be_blank
       end
+
       it 'redirects to the sign in page' do
         expect(response).to redirect_to sign_in_path
       end
@@ -58,9 +59,7 @@ describe SessionsController do
 
   describe 'GET destroy' do
     context 'for authenticated users' do
-      before do
-        session[:user_id] = Fabricate(:user).id
-      end
+      before { set_current_user }
 
       it 'redirects to the sign in page' do
         get :destroy
@@ -73,6 +72,7 @@ describe SessionsController do
 
         expect(session[:user_id]).to be_nil
       end
+
       it 'sets the flash success message' do
         get :destroy
         
