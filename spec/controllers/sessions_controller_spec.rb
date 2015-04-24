@@ -8,7 +8,7 @@ describe SessionsController do
       expect(response).to render_template :new
     end
     it 'redirects_to home path for authenticated users' do
-      session[:user_id] = Fabricate(:user).id
+      set_current_user
 
       get :new
 
@@ -19,7 +19,6 @@ describe SessionsController do
   describe 'POST create' do
     context 'with valid credentials' do
       let(:alice) { Fabricate(:user) }
-
       before do
         post :create, email: alice.email, password: alice.password 
       end
@@ -59,7 +58,7 @@ describe SessionsController do
   describe 'GET destroy' do
     context 'for authenticated users' do
       before do
-        session[:user_id] = Fabricate(:user).id
+        set_current_user
       end
 
       it 'redirects to the sign in page' do

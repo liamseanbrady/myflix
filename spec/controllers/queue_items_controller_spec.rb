@@ -4,7 +4,7 @@ describe QueueItemsController do
   describe 'GET index' do
     it 'sets @queue_items for the authenticated user' do
       alice = Fabricate(:user)
-      session[:user_id] = alice.id
+      set_current_user(alice)
       queue_item_one = Fabricate(:queue_item, user: alice)
       queue_item_two = Fabricate(:queue_item, user: alice)
 
@@ -24,7 +24,7 @@ describe QueueItemsController do
     context 'for authenticated users' do
       let(:alice) { Fabricate(:user) }
       before do
-        session[:user_id] = alice.id
+        set_current_user(alice)
       end
 
       it 'creates a queue item' do
@@ -83,7 +83,7 @@ describe QueueItemsController do
     context 'for authenticated users' do
       let(:alice) { Fabricate(:user) }
       before do
-        session[:user_id] = alice.id
+        set_current_user(alice)
       end
       
       it 'removes the video from the queue' do
@@ -138,7 +138,7 @@ describe QueueItemsController do
       let(:queue_item_one) { Fabricate(:queue_item, user: alice, position: 1, video: video) }
       let(:queue_item_two) { Fabricate(:queue_item, user: alice, position: 2, video: video) }
       before do
-        session[:user_id] = alice.id
+        set_current_user(alice)
       end
         
       it 'redirects to the my queue page' do
@@ -166,7 +166,7 @@ describe QueueItemsController do
       let(:queue_item_one) { Fabricate(:queue_item, user: alice, position: 1, video: video) }
       let(:queue_item_two) { Fabricate(:queue_item, user: alice, position: 2, video: video) }
       before do
-        session[:user_id] = alice.id
+        set_current_user(alice)
       end
     
       it 'redirects to my queue page' do
@@ -199,7 +199,7 @@ describe QueueItemsController do
     context 'with queue items that do not belong to the current user' do
       it 'does not reorder queue items that do not belong to the current user' do
         alice = Fabricate(:user)
-        session[:user_id] = alice.id
+        set_current_user(alice)
         bob = Fabricate(:user)
         video = Fabricate(:video)
         queue_item_one = Fabricate(:queue_item, user: alice, position: 1, video: video)

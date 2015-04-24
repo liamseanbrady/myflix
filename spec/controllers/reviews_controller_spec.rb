@@ -5,7 +5,7 @@ describe ReviewsController do
     context 'for authenticated users' do
       let(:alice) { Fabricate(:user) }
       before do
-        session[:user_id] = alice.id
+        set_current_user(alice)
       end
 
       context 'with valid input' do
