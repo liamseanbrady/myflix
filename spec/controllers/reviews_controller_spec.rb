@@ -4,9 +4,7 @@ describe ReviewsController do
   describe 'POST create' do
     context 'for authenticated users' do
       let(:alice) { Fabricate(:user) }
-      before do
-        set_current_user(alice)
-      end
+      before { set_current_user(alice) }
 
       context 'with valid input' do
         let(:video) { Fabricate(:video) }

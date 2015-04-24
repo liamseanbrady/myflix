@@ -23,9 +23,7 @@ describe QueueItemsController do
   describe 'POST create' do
     context 'for authenticated users' do
       let(:alice) { Fabricate(:user) }
-      before do
-        set_current_user(alice)
-      end
+      before { set_current_user(alice) }
 
       it 'creates a queue item' do
         video = Fabricate(:video)
@@ -82,9 +80,7 @@ describe QueueItemsController do
   describe 'DELETE destroy' do
     context 'for authenticated users' do
       let(:alice) { Fabricate(:user) }
-      before do
-        set_current_user(alice)
-      end
+      before { set_current_user(alice) }
       
       it 'removes the video from the queue' do
         queue_item = Fabricate(:queue_item, user: alice)
@@ -137,9 +133,7 @@ describe QueueItemsController do
       let(:video) { Fabricate(:video) }
       let(:queue_item_one) { Fabricate(:queue_item, user: alice, position: 1, video: video) }
       let(:queue_item_two) { Fabricate(:queue_item, user: alice, position: 2, video: video) }
-      before do
-        set_current_user(alice)
-      end
+      before { set_current_user(alice) }
         
       it 'redirects to the my queue page' do
         post :update_queue, queue_items: [{ id: queue_item_one.id, position: 2}, { id: queue_item_two.id, position: 1}]
@@ -165,9 +159,7 @@ describe QueueItemsController do
       let(:video) { Fabricate(:video) }
       let(:queue_item_one) { Fabricate(:queue_item, user: alice, position: 1, video: video) }
       let(:queue_item_two) { Fabricate(:queue_item, user: alice, position: 2, video: video) }
-      before do
-        set_current_user(alice)
-      end
+      before { set_current_user(alice) }
     
       it 'redirects to my queue page' do
         post :update_queue, queue_items: [{ id: queue_item_one.id, position: 3 }, { id: queue_item_two.id, position: 2.35 }]

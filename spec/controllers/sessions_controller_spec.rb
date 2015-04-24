@@ -56,9 +56,7 @@ describe SessionsController do
 
   describe 'GET destroy' do
     context 'for authenticated users' do
-      before do
-        set_current_user
-      end
+      before { set_current_user }
 
       it 'redirects to the sign in page' do
         get :destroy
