@@ -173,7 +173,7 @@ describe QueueItemsController do
       it 'does not reorder the queue items' do
         post :update_queue, queue_items: [{ id: queue_item_one.id, position: 3 }, { id: queue_item_two.id, position: 2.35 }]
 
-        expect(queue_item_one.reload.position).to eq(1)
+        expect(alice.queue_items.map(&:position)).to eq([1, 2])
       end
     end
 
