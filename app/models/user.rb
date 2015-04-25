@@ -5,4 +5,9 @@ class User < ActiveRecord::Base
   has_many :queue_items, ->{ order(:position) }
 
   has_secure_password validations: false
+
+  def queued_video?(video)
+    queue_items.find_by(user: self, video: video) ? true : false
+  end
 end
+
