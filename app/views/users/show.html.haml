@@ -12,7 +12,7 @@
               %th(width="30%") Video Title
               %th(width="15%") Genre
           %tbody
-            - @user.queue_itmes.each do |queue_item|
+            - @user.queue_items.each do |queue_item|
               %tr
                 %td
                   = link_to queue_item.video_title, video_path(queue_item.video)
