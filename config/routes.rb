@@ -21,5 +21,5 @@ Myflix::Application.routes.draw do
   resources :categories, only: [:show]
   resources :users, only: [:create, :show]
   resources :sessions, only: [:create]
-  resources :relationships, only: [:destroy]
+  resources :relationships, only: [:create, :destroy]
 end
