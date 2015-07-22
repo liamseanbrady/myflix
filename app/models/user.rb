@@ -12,5 +12,13 @@ class User < ActiveRecord::Base
   def queued_video?(video)
     queue_items.find_by(user: self, video: video) ? true : false
   end
+
+  def follows?(another_user)
+    following_relationships.where(leader: another_user).present?
+  end
+
+  def can_follow?(another_user)
+    !(another_user == self || follows?(another_user))
+  end
 end
 
