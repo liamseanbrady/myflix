@@ -9,6 +9,12 @@ describe User do
   it { is_expected.to have_many(:reviews).order(created_at: :desc) }
   it { is_expected.to have_many(:following_relationships) }
   it { is_expected.to have_many(:leading_relationships) }
+  
+  it 'generates a random token when a user is created' do
+    alice = Fabricate(:user)
+
+    expect(alice.token).not_to be_blank
+  end
 
   describe '#queued_video' do
     it 'returns false when the user has not queued the video' do
@@ -66,5 +72,4 @@ describe User do
       expect(alice.can_follow?(bob)).to be true
     end
   end
-
 end
