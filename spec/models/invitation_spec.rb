@@ -5,9 +5,7 @@ describe Invitation do
   it { is_expected.to validate_presence_of(:recipient_email) }
   it { is_expected.to validate_presence_of(:message) }
 
-  it 'generates a random token when a user is created' do
-    invitation = Fabricate(:invitation)
-
-    expect(invitation.token).not_to be_blank
+  it_behaves_like 'tokenable' do
+    let(:tokenable_object) { Fabricate(:invitation) }
   end
 end

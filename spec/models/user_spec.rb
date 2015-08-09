@@ -10,10 +10,8 @@ describe User do
   it { is_expected.to have_many(:following_relationships) }
   it { is_expected.to have_many(:leading_relationships) }
   
-  it 'generates a random token when a user is created' do
-    alice = Fabricate(:user)
-
-    expect(alice.token).not_to be_blank
+  it_behaves_like 'tokenable' do
+    let(:tokenable_object) { Fabricate(:user) }
   end
 
   describe '#queued_video' do
