@@ -20,5 +20,7 @@ feature 'User resets password' do
     click_button 'Sign in'
 
     expect(page).to have_content("Welcome, #{alice.full_name}")
+
+    clear_email
   end
 end

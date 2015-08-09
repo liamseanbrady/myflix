@@ -3,6 +3,8 @@ require 'spec_helper'
 describe ForgotPasswordsController do
   describe 'POST create' do
     context 'with blank input' do
+      after { ActionMailer::Base.deliveries.clear }
+
       it 'redirects to the forgot password page' do
         post :create, email: ''
 
@@ -15,7 +17,7 @@ describe ForgotPasswordsController do
         expect(flash[:danger]).to eq('Email cannot be blank')
       end
 
-      it 'does send send an email' do
+      it 'does send an email' do
         post :create, email: ''
 
         expect(ActionMailer::Base.deliveries.count).to eq(0)
@@ -42,7 +44,9 @@ describe ForgotPasswordsController do
       end
     end
    
-    context 'with non-existing email'
+    context 'with non-existent email' do
+      after { ActionMailer::Base.deliveries.clear }
+      
       it 'redirects to the forgot password page' do
         post :create, email: 'alice@example.com'
 
@@ -60,5 +64,6 @@ describe ForgotPasswordsController do
 
         expect(flash[:danger]).to eq('There is no user with that email in the system')
       end
+    end
   end
 end
