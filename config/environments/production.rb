@@ -19,12 +19,12 @@ Myflix::Application.configure do
   config.active_support.deprecation = :notify
 
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
+    address: "smtp.mailgun.org",
     port: 587,
-    domain: "gmail.com",
+    domain: "sandbox1d53072f892547b491c355ba4c9ba567.mailgun.org",
     authentication: "plain",
     enable_starttls_auto: true,
-    user_name: ENV["GMAIL_USERNAME"],
-    password: ENV["GMAIL_PASSWORD"]
+    user_name: ENV["MAIL_USERNAME"],
+    password: ENV["MAIL_PASSWORD"]
   }
 end
