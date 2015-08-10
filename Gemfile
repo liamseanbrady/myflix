@@ -11,6 +11,7 @@ gem 'jquery-rails'
 gem 'pg'
 gem 'bcrypt-ruby', '~> 3.1.0'
 gem 'sidekiq'
+gem 'unicorn'
 
 group :development do
   gem 'thin'
