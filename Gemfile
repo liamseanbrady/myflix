@@ -11,7 +11,6 @@ gem 'jquery-rails'
 gem 'pg'
 gem 'bcrypt-ruby', '~> 3.1.0'
 gem 'sidekiq'
-gem 'unicorn'
 
 group :development do
   gem 'thin'
@@ -37,5 +36,7 @@ end
 
 group :production do
   gem 'rails_12factor'
+  gem 'sentry-raven'
+  gem 'unicorn'
 end
 
