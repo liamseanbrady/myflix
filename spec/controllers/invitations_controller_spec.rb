@@ -59,6 +59,8 @@ describe InvitationsController do
     end
 
     context 'with invalid input' do
+      after { ActionMailer::Base.deliveries.clear }
+
       it 'renders the :new template' do
         set_current_user
 

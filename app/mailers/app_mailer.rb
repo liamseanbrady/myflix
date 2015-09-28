@@ -1,26 +1,28 @@
 class AppMailer < ActionMailer::Base
+  default from: 'no-reply@myflix.com'
+
   def send_welcome_email(user)
     @user = user
-    send_email('ingin@example.com', user.email, 'Welcome to MyFlix')
+    send_mail user.email, 'Welcome to MyFlix'
   end
 
   def send_reset_password_email(user)
     @user = user
-    send_email('ingin@example.com', user.email, 'You can now reset your password')
+    send_mail user.email, 'You can now reset your password'
   end
 
   def send_invitation_email(invitation)
     @invitation = invitation
-    send_email('ingin@example.com', invitation.recipient_email, invitation.message)
+    send_mail invitation.recipient_email, invitation.message
   end
 
-  private 
+  private
 
-  def send_email(sender, recipient, subject)
+  def send_mail(recipient, subject)
     if Rails.env.staging?
-      mail from: sender, to: ENV[TEST_EMAIL], subject: subject
+      mail to: ENV['TEST_EMAIL'], subject: subject
     else
-      mail from: sender, to: recipient, subject: subject
+      mail to: recipient, subject: subject
     end
   end
 end
