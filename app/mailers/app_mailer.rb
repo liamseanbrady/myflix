@@ -20,7 +20,7 @@ class AppMailer < ActionMailer::Base
 
   def send_mail(recipient, subject)
     if Rails.env.staging?
-      mail to: ENV[TEST_EMAIL], subject: subject
+      mail to: ENV['TEST_EMAIL'], subject: subject
     else
       mail to: recipient, subject: subject
     end
