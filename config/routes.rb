@@ -20,6 +20,11 @@ Myflix::Application.routes.draw do
     end
     resources :reviews, only: [:create]
   end
+
+  namespace :admin do
+    resources :videos, only: [:new, :create]
+  end
+
   resources :queue_items, only: [:create, :destroy]
   post '/update_queue', to: 'queue_items#update_queue'
   resources :categories, only: [:show]
