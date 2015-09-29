@@ -15,6 +15,10 @@ class User < ActiveRecord::Base
     queue_items.find_by(user: self, video: video) ? true : false
   end
 
+  def admin?
+    !!admin
+  end
+
   def follows?(another_user)
     following_relationships.where(leader: another_user).present?
   end
