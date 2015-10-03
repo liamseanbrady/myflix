@@ -19,3 +19,6 @@
 
 # Ignore redis dumps
 /*.rdb
+
+# Ignore local uplaods
+/public/uploads/*
