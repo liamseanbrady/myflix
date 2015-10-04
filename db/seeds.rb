@@ -45,7 +45,7 @@ videos = {
 videos.each do |title, description|
   3.times do
     large_cover = (title == 'Monk' ? 'large_' : '')
-    Video.create(title: title, description: description, small_cover_url: "/tmp/#{title.parameterize.underscore}.jpg", large_cover_url: "/tmp/#{large_cover}#{title.parameterize.underscore}.jpg", category: categories.sample)
+    Video.create(title: title, description: description, category: categories.sample)
   end
 end
 

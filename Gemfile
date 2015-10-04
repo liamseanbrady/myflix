@@ -11,6 +11,8 @@ gem 'jquery-rails'
 gem 'pg'
 gem 'bcrypt-ruby', '~> 3.1.0'
 gem 'sidekiq'
+gem 'carrierwave'
+gem 'mini_magick'
 
 group :development do
   gem 'thin'
@@ -38,5 +40,6 @@ group :production, :staging do
   gem 'rails_12factor'
   gem 'sentry-raven'
   gem 'unicorn'
+  gem 'carrierwave-aws'
 end
 
