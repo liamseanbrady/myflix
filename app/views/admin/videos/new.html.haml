@@ -15,7 +15,7 @@
               .col-sm-3
                 = f.text_field :title, class: 'form-control'
             .form-group
-              = f.label :category, 'Category', class: 'control-label col-sm-3'
+              = f.label :category_id, 'Category', class: 'control-label col-sm-3'
               .col-sm-6
                 = f.select :category_id, options_for_select(Category.all.map { |category| [category.name, category.id] }), class: 'form-control'
             .form-group
@@ -33,10 +33,10 @@
                 %col.btn.btn-file
                   = f.file_field :small_cover, class: 'form-control'
             .form-group
-              = f.label :url, 'Video URL', class: 'control-label col-sm-3'
+              = f.label :video_url, 'Video URL', class: 'control-label col-sm-3'
               .col-sm-6
                 = f.text_field :video_url, class: 'form-control'
 
           %fieldset.actions.form-group
             .col-sm-6.col-md-offset-3
-              = f.submit 'Submit', class: 'btn btn-default'
+              = f.submit 'Add Video', class: 'btn btn-default'
