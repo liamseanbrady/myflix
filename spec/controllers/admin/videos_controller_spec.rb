@@ -67,7 +67,7 @@ describe Admin::VideosController do
       end
 
       it 'sets the flash error message' do
-        expect(flash[:danger]).to be_present
+        expect(flash.now[:danger]).to be_present
       end
     end
   end
