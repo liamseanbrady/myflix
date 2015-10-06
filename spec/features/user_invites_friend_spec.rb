@@ -29,7 +29,7 @@ feature 'User invites friend' do
     current_email.click_link 'Accept this invitation'
     fill_in 'Password', with: 'password'
     fill_in 'Full Name', with: 'Bob Doe'
-    click_button 'Submit'
+    click_button 'Register and Pay'
   end
 
   def friend_signs_in
