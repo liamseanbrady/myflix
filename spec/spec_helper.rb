@@ -6,6 +6,7 @@ require 'shoulda/matchers'
 require 'capybara/rails'
 require 'capybara/email/rspec'
 require 'sidekiq/testing'
+require 'vcr'
 
 Sidekiq::Testing.inline!
 
@@ -23,9 +24,14 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 VCR.configure do |c|
-  c.cassette_library_dir = ‘spec/cassettes’
+  c.default_cassette_options = { 
+    :record => :new_episodes, 
+    :erb => true 
+  }
+  c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :webmock
   c.configure_rspec_metadata!
+  c.ignore_localhost = true
 end
 
 RSpec.configure do |config|
@@ -38,6 +44,7 @@ RSpec.configure do |config|
   # config.mock_with :rr
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
