@@ -3,26 +3,71 @@ require 'spec_helper'
 describe StripeWrapper do
   describe StripeWrapper::Charge do
     describe '.create' do
-      it 'makes a successful charge', :vcr do
-        Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+      context 'with valid card' do
+        it 'makes a successful charge', :vcr do
+          StripeWrapper::Charge.set_api_key
 
-        token = Stripe::Token.create(
-          :card => {
-            number: '4242424242424242',
-            cvc: 123,
-            exp_month: Date.today.month,
-            exp_year: Date.today.year + 2
-          }
-        ).id
+          token = Stripe::Token.create(
+            :card => {
+              number: '4242424242424242',
+              cvc: 123,
+              exp_month: Date.today.month,
+              exp_year: Date.today.year + 2
+            }
+          ).id
 
-        response = StripeWrapper::Charge.create(
-          amount: 500, 
-          card: token, 
-          description: 'A valid charge'
-        )
-        
-        expect(response.amount).to eq(500)
-        expect(response.currency).to eq('usd')
+          response = StripeWrapper::Charge.create(
+            amount: 500, 
+            card: token, 
+            description: 'A valid charge'
+          )
+          
+          expect(response).to be_successful
+        end
+      end
+
+      context 'with invalid card' do
+        it 'does not make a charge', :vcr do
+          StripeWrapper::Charge.set_api_key
+
+          token = Stripe::Token.create(
+            :card => {
+              number: '4000000000000002',
+              cvc: 123,
+              exp_month: Date.today.month,
+              exp_year: Date.today.year + 2
+            }
+          ).id
+
+          response = StripeWrapper::Charge.create(
+            amount: 500, 
+            card: token, 
+            description: 'An invalid charge'
+          )
+          
+          expect(response).not_to be_successful
+        end
+
+        it 'provides an error message', :vcr do
+          StripeWrapper::Charge.set_api_key
+
+          token = Stripe::Token.create(
+            :card => {
+              number: '4000000000000002',
+              cvc: 123,
+              exp_month: Date.today.month,
+              exp_year: Date.today.year + 2
+            }
+          ).id
+
+          response = StripeWrapper::Charge.create(
+            amount: 500, 
+            card: token, 
+            description: 'An invalid charge'
+          )
+          
+          expect(response.error_message).to eq('Your card was declined.')
+        end
       end
     end
   end
