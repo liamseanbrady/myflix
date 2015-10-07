@@ -2,8 +2,8 @@ jQuery(function($) { $('#payment-form').submit(function(event) {
     var $form = $(this);
       $form.find('.payment_submit').prop('disabled', true);
       Stripe.createToken({
-        number: $('.card-number').val(),
-        cvc: $('.card-cvc').val(),
+        number: $('#credit-card-number').val(),
+        cvc: $('#security-code').val(),
         exp_month: $('.card-expiry-month').val(),
         exp_year: $('.card-expiry-year').val()
       }, stripeResponseHandler);
@@ -18,6 +18,7 @@ jQuery(function($) { $('#payment-form').submit(function(event) {
       $form.find('.payment_submit').prop('disabled', false)
     } else {
       var token = response.id;
+      
       $form.append($('<input type="hidden" name="stripeToken" />').val(token));
       $form.get(0).submit();
     }
