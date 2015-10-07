@@ -11,19 +11,15 @@ module StripeWrapper
                      description: options[:description]
                    )
 
-        new(response, :success)
+        new(response: response, status: :success)
       rescue Stripe::CardError => e
-        new(e, :failure)
+        new(response: e, status: :failure)
       end
     end
     
-    def self.set_api_key
-      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-    end
-
-    def initialize(response, status)
-      @response = response
-      @status = status
+    def initialize(options = {})
+      @response = options[:response]
+      @status = options[:status]
     end
 
     def successful?
