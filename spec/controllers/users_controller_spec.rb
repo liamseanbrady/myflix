@@ -20,38 +20,41 @@ describe UsersController do
       it_behaves_like 'requires sign in' do
         let(:action) { post :create, user: Fabricate.attributes_for(:user) }
       end
+
+      it 'makes the user follow the inviter' do
+        alice = Fabricate(:user)
+        invitation = Fabricate(:invitation, inviter: alice, recipient_email: 'bob@example.com')
+
+        post :create, user: Fabricate.attributes_for(:user, email: 'bob@example.com'), invitation_token: invitation.token
+
+        bob = User.find_by(email: 'bob@example.com')
+        expect(bob.follows?(alice)).to be_truthy
+      end
+
+      it 'makes the inviter follow the user' do
+        alice = Fabricate(:user)
+        invitation = Fabricate(:invitation, inviter: alice, recipient_email: 'bob@example.com')
+
+        post :create, user: Fabricate.attributes_for(:user, email: 'bob@example.com'), invitation_token: invitation.token
+
+        bob = User.find_by(email: 'bob@example.com')
+        expect(alice.follows?(bob)).to be_truthy
+      end
+
+      it 'expires the invitation upon acceptance' do
+        alice = Fabricate(:user)
+        invitation = Fabricate(:invitation, inviter: alice, recipient_email: 'bob@example.com')
+
+        post :create, user: Fabricate.attributes_for(:user, email: 'bob@example.com'), invitation_token: invitation.token
+
+        expect(invitation.reload.token).to be_nil
+      end
     end
 
-    it 'makes the user follow the inviter' do
-      alice = Fabricate(:user)
-      invitation = Fabricate(:invitation, inviter: alice, recipient_email: 'bob@example.com')
-
-      post :create, user: Fabricate.attributes_for(:user, email: 'bob@example.com'), invitation_token: invitation.token
-
-      bob = User.find_by(email: 'bob@example.com')
-      expect(bob.follows?(alice)).to be_truthy
-    end
-
-    it 'makes the inviter follow the user' do
-      alice = Fabricate(:user)
-      invitation = Fabricate(:invitation, inviter: alice, recipient_email: 'bob@example.com')
-
-      post :create, user: Fabricate.attributes_for(:user, email: 'bob@example.com'), invitation_token: invitation.token
-
-      bob = User.find_by(email: 'bob@example.com')
-      expect(alice.follows?(bob)).to be_truthy
-    end
-
-    it 'expires the invitation upon acceptance' do
-      alice = Fabricate(:user)
-      invitation = Fabricate(:invitation, inviter: alice, recipient_email: 'bob@example.com')
-
-      post :create, user: Fabricate.attributes_for(:user, email: 'bob@example.com'), invitation_token: invitation.token
-
-      expect(invitation.reload.token).to be_nil
-    end
 
     context 'with invalid input' do
+      before { StripeWrapper::Charge.stub(:create) }
+
       it 'does not create a user' do
         post :create, user: { email: 'anon@example.com' }
 
@@ -66,7 +69,10 @@ describe UsersController do
     end
 
     context 'when sending email' do
-      before { ActionMailer::Base.deliveries.clear }
+      before do
+        ActionMailer::Base.deliveries.clear
+        StripeWrapper::Charge.stub(:create)
+      end
       
       it 'sends out email to the user with valid inputs' do
         post :create, user: { full_name: 'Alice', email: 'alice@example.com', password: 'password' }
