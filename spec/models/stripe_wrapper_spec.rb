@@ -5,8 +5,6 @@ describe StripeWrapper do
     describe '.create' do
       context 'with valid card' do
         it 'makes a successful charge', :vcr do
-          StripeWrapper::Charge.set_api_key
-
           token = Stripe::Token.create(
             :card => {
               number: '4242424242424242',
@@ -28,8 +26,6 @@ describe StripeWrapper do
 
       context 'with invalid card' do
         it 'does not make a charge', :vcr do
-          StripeWrapper::Charge.set_api_key
-
           token = Stripe::Token.create(
             :card => {
               number: '4000000000000002',
@@ -49,8 +45,6 @@ describe StripeWrapper do
         end
 
         it 'provides an error message', :vcr do
-          StripeWrapper::Charge.set_api_key
-
           token = Stripe::Token.create(
             :card => {
               number: '4000000000000002',
