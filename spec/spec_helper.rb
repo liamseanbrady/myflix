@@ -5,7 +5,10 @@ require 'rspec/rails'
 require 'shoulda/matchers'
 require 'capybara/rails'
 require 'capybara/email/rspec'
+require 'capybara/poltergeist'
 require 'sidekiq/testing'
+require 'vcr'
+
 Sidekiq::Testing.inline!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -21,6 +24,24 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+Capybara.javascript_driver = :webkit
+Capybara.server_port = 52662
+
+Capybara::Webkit.configure do |config|
+  config.allow_url('*.stripe.com')
+end
+
+VCR.configure do |c|
+  c.default_cassette_options = { 
+    :record => :new_episodes, 
+    :erb => true 
+  }
+  c.cassette_library_dir = 'spec/cassettes'
+  c.hook_into :webmock
+  c.configure_rspec_metadata!
+  c.ignore_localhost = true
+end
+
 RSpec.configure do |config|
   # ## Mock Framework
   #
@@ -31,12 +52,13 @@ RSpec.configure do |config|
   # config.mock_with :rr
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
@@ -69,16 +91,16 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.before(:each, :js => true) do
     DatabaseCleaner.strategy = :truncation
   end
 
-# config.before(:each) do
-#   DatabaseCleaner.start
-# end
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
 
   config.after(:each) do
     DatabaseCleaner.clean

@@ -13,6 +13,8 @@ gem 'bcrypt-ruby', '~> 3.1.0'
 gem 'sidekiq'
 gem 'carrierwave'
 gem 'mini_magick'
+gem 'stripe'
+gem 'figaro'
 
 group :development do
   gem 'thin'
@@ -33,7 +35,12 @@ group :test do
   gem 'fabrication'
   gem 'faker'
   gem 'capybara'
+  gem 'capybara-webkit'
   gem 'capybara-email'
+  gem 'webmock'
+  gem 'vcr'
+  gem 'poltergeist'
+  gem 'selenium-webdriver'
 end
 
 group :production, :staging do
