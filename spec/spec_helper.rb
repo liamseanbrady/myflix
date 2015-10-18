@@ -24,7 +24,12 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+Capybara.javascript_driver = :webkit
 Capybara.server_port = 52662
+
+Capybara::Webkit.configure do |config|
+  config.allow_url('*.stripe.com')
+end
 
 VCR.configure do |c|
   c.default_cassette_options = { 
