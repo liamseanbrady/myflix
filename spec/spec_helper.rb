@@ -5,6 +5,7 @@ require 'rspec/rails'
 require 'shoulda/matchers'
 require 'capybara/rails'
 require 'capybara/email/rspec'
+require 'capybara/poltergeist'
 require 'sidekiq/testing'
 require 'vcr'
 
