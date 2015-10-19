@@ -11,4 +11,8 @@ class Video < ActiveRecord::Base
     return none unless search_term.present?
     where('title LIKE ?', "%#{search_term}%").order(created_at: :desc)
   end
+
+  def rating
+    reviews.average(:rating).round(1) if reviews.any?
+  end
 end

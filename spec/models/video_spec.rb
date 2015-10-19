@@ -42,4 +42,27 @@ describe Video do
       expect(Video.search_by_title('')).to eq([])
     end
   end
+
+  describe '#rating' do
+    it 'returns 0.0 if the video has no ratings' do
+      fringe = Fabricate(:video)
+
+      expect(fringe.rating).to be_nil
+    end
+    
+    it 'returns the rating for a video with only one rating to one decimal place' do
+      fringe = Fabricate(:video)
+      review = Fabricate(:review, rating: 5, video: fringe)
+
+      expect(fringe.rating).to eq(5.0)
+    end
+
+    it 'returns the average rating of two videos to one decimal place' do
+      fringe = Fabricate(:video)
+      Fabricate(:review, rating: 5, video: fringe)
+      Fabricate(:review, rating: 4, video: fringe)
+
+      expect(fringe.rating).to eq(4.5)
+    end
+  end
 end
