@@ -2,16 +2,32 @@ class UsersController < ApplicationController
   before_action :require_user, only: [:show]
 
   def new
+    redirect_to home_path and return if logged_in?
     @user = User.new
   end
 
   def create
     @user = User.new(user_params)
-    if @user.save
-      handle_invitation
-      AppMailer.send_welcome_email(@user).deliver
-      redirect_to sign_in_path
+    if @user.valid?
+      Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+      charge = StripeWrapper::Charge.create(
+        :amount => 999,
+        :card => params[:stripeToken],
+        :description => "Sign up charge for #{@user.email}"
+      )
+
+      if charge.successful?
+        @user.save
+        handle_invitation
+        AppMailer.send_welcome_email(@user).deliver
+        flash[:success] = 'Thank you for registering with MyFlix. Please sign in now'
+        redirect_to sign_in_path
+      else
+        flash.now[:danger] = charge.error_message
+        render :new
+      end
     else
+      flash.now[:danger] = 'Invalid user information. Please check the errors below'
       render :new
     end
   end

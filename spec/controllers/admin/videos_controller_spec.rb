@@ -34,7 +34,7 @@ describe Admin::VideosController do
 
       before do
         set_current_admin
-        post :create, video: { title: 'Fringe', description: 'A good show', category_id: category.id }
+        post :create, video: { title: 'Fringe', description: 'A good show', category_id: category.id, video_url: 'http://some_video.com' }
       end
 
       it 'creates a video' do
@@ -55,7 +55,7 @@ describe Admin::VideosController do
 
       before do
         set_current_admin
-        post :create, video: { title: '', description: 'A good show', category_id: category.id }
+        post :create, video: { title: 'Fringe', description: 'A good show', category_id: category.id }
       end
 
       it 'does not create video' do
@@ -67,7 +67,7 @@ describe Admin::VideosController do
       end
 
       it 'sets the flash error message' do
-        expect(flash[:danger]).to be_present
+        expect(flash.now[:danger]).to be_present
       end
     end
   end
