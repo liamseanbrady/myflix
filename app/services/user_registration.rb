@@ -7,16 +7,16 @@ class UserRegistration
 
   def register(stripe_token, invitation_token)
     if @user.valid?
-      charge = charge_card(stripe_token)
+      subscription = set_up_subscription(@user, stripe_token)
 
-      if charge.successful?
+      if subscription.successful?
         @user.save
         handle_invitation(invitation_token)
         AppMailer.send_welcome_email(@user).deliver
         @status = :success
       else
         @status = :failure
-        @error_message = charge.error_message
+        @error_message = subscription.error_message
       end
     else
       @status = :failure
@@ -26,12 +26,11 @@ class UserRegistration
     self
   end
 
-  def charge_card(stripe_token)
+  def set_up_subscription(user, stripe_token)
     Stripe.api_key = ENV['STRIPE_SECRET_KEY']
-    StripeWrapper::Charge.create(
-      :amount => 999,
+    StripeWrapper::Customer.create(
       :card => stripe_token,
-      :description => "Sign up charge for #{@user.email}"
+      :user => user,
     )
   end
 
