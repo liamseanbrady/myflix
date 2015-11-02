@@ -80,13 +80,24 @@ describe User do
 
       expect(alice.follows?(bob)).to be_truthy
     end
+
+    it 'does not allow a user to follow themself' do
+      alice = Fabricate(:user)
+
+      alice.follow(alice)
+
+      expect(alice.follows?(alice)).to be_falsey
+    end
   end
 
-  it 'does not allow a user to follow themself' do
-    alice = Fabricate(:user)
 
-    alice.follow(alice)
+  describe '#deactivate!' do
+    it "deactivates an active user" do
+      alice = Fabricate(:user, active: true)
 
-    expect(alice.follows?(alice)).to be_falsey
+      alice.deactivate!
+
+      expect(alice).not_to be_active
+    end
   end
 end
