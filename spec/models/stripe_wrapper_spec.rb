@@ -12,7 +12,7 @@ describe StripeWrapper do
     ).id
   end
 
-  let(:declined_token) do
+  let(:declined_card_token) do
     token = Stripe::Token.create(
       :card => {
         number: '4000000000000002',
@@ -41,7 +41,7 @@ describe StripeWrapper do
         it 'does not make a charge', :vcr do
           response = StripeWrapper::Charge.create(
             amount: 500, 
-            card: declined_token, 
+            card: declined_card_token, 
             description: 'An invalid charge'
           )
           
@@ -51,7 +51,7 @@ describe StripeWrapper do
         it 'provides an error message', :vcr do
           response = StripeWrapper::Charge.create(
             amount: 500, 
-            card: declined_token, 
+            card: declined_card_token, 
             description: 'An invalid charge'
           )
           
@@ -79,7 +79,7 @@ describe StripeWrapper do
 
         response = StripeWrapper::Customer.create(
           :user => bob,
-          :card => declined_token
+          :card => declined_card_token
         )
 
         expect(response).not_to be_successful
@@ -90,10 +90,21 @@ describe StripeWrapper do
 
         response = StripeWrapper::Customer.create(
           :user => bob,
-          :card => declined_token
+          :card => declined_card_token
         )
 
         expect(response.error_message).to eq('Your card was declined.')
+      end
+
+      it 'returns a customer with a customer token for a valid card', :vcr do
+        bob = Fabricate(:user, email: 'bob@example.com')
+
+        response = StripeWrapper::Customer.create(
+          :user => bob,
+          :card => valid_token
+        )
+
+        expect(response.customer_token).to be_present
       end
     end
   end
