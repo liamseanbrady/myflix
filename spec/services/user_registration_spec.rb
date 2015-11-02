@@ -3,7 +3,7 @@ require 'spec_helper'
 describe UserRegistration do
   describe '#register' do
     context 'valid personal info and valid card' do
-      let(:customer) { double('customer', successful?: true) }
+      let(:customer) { double('customer', successful?: true, customer_token: 'abcdefg') }
       before do
         StripeWrapper::Customer.should_receive(:create).and_return(customer) 
         ActionMailer::Base.deliveries.clear
@@ -15,6 +15,12 @@ describe UserRegistration do
         expect(User.count).to eq(1)
       end
 
+      it 'stores the customer token from stripe' do
+        UserRegistration.new(Fabricate.build(:user)).register('stripe-token', nil)
+
+        expect(User.first.customer_token).to eq('abcdefg')
+      end
+  
       it 'makes the user follow the inviter' do
         alice = Fabricate(:user)
         invitation = Fabricate(:invitation, inviter: alice, recipient_email: 'bob@example.com')

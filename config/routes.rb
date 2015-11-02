@@ -35,4 +35,6 @@ Myflix::Application.routes.draw do
   resources :forgot_passwords, only: [:create]
   resources :password_resets, only: [:show, :create]
   resources :invitations, only: [:new, :create]
+
+  mount StripeEvent::Engine => '/stripe_events'
 end
