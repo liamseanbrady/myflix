@@ -1,6 +1,8 @@
 class AdminController < AuthenticatedController
   before_action :require_admin
 
+  private
+
   def require_admin
     if !current_user.admin?
       flash[:danger] = 'You are not allowed to access this area'

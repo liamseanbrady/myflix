@@ -64,7 +64,7 @@ describe SessionsController do
       it 'redirects to the sign in page' do
         get :destroy
 
-        expect(response).to redirect_to sign_in_path
+        expect(response).to redirect_to root_path
       end
       
       it 'sets the user in the session to nil' do
