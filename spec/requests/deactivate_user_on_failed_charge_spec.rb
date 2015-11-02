@@ -81,6 +81,6 @@ describe 'Deactivate user on failed charge' do
 
     post '/stripe_events', event_data
 
-    expect(alice).not_to be_active
+    expect(alice.reload).not_to be_active
   end
 end
