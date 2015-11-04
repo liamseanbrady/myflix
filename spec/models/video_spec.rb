@@ -65,4 +65,57 @@ describe Video do
       expect(fringe.rating).to eq(4.5)
     end
   end
+  describe '.search', :elasticsearch do
+    let(:refresh_index) do
+      Video.import
+      Video.__elasticsearch__.refresh_index!
+    end
+
+    context 'with title' do
+      it 'returns an empty array when there is no match' do
+        Fabricate(:video, title: 'Fringe')
+
+        refresh_index
+
+        expect(Video.search("No Match")).to eq([])
+      end
+
+      it 'returns an empty array when the search term is empty' do
+        Fabricate(:video, title: 'Fringe')
+
+        refresh_index
+
+        expect(Video.search("")).to eq([])
+      end
+
+      it 'returns an array with one video for title case insensitive match' do
+        fringe = Fabricate(:video, title: 'Fringe')
+        futurama = Fabricate(:video, title: 'Futurama')
+
+        refresh_index
+
+        expect(Video.search("fringe")).to eq([fringe])
+      end
+
+      it 'returns an array of many videos for title match' do
+        fringe = Fabricate(:video, title: 'Fringe')
+        fringe_science = Fabricate(:video, title: 'Fringe science')
+
+        refresh_index
+
+        expect(Video.search("fringe")).to match_array([fringe, fringe_science])
+      end
+    end
+
+    context 'with title and description' do 
+      it 'returns an array of many videos based on title and description match' do
+        fringe = Fabricate(:video, title: 'Fringe')
+        friends = Fabricate(:video, title: 'Friends', description: 'A lunatic fringe who are all friends')
+
+        refresh_index
+
+        expect(Video.search('fringe')).to match_array([fringe, friends])
+      end
+    end
+  end
 end
