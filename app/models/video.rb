@@ -1,5 +1,7 @@
 class Video < ActiveRecord::Base
   include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   index_name ['myflix', Rails.env].join('_')
 
   belongs_to :category  
@@ -24,7 +26,16 @@ class Video < ActiveRecord::Base
   end
 
   def self.search(term)
-    response = __elasticsearch__.search query: { multi_match: { query: term, fields: ['title', 'description'], operator: 'and' } }
-    response.records.to_a
+    search_definition = {
+      query: {
+        multi_match: {
+          query: term,
+          fields: ["title", "description"],
+          operator: "and"
+        }
+      }
+    }
+    
+    __elasticsearch__.search search_definition
   end
 end
