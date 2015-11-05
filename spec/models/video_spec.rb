@@ -77,7 +77,7 @@ describe Video do
 
         refresh_index
 
-        expect(Video.search("No Match")).to eq([])
+        expect(Video.search("No Match").records.to_a).to eq([])
       end
 
       it 'returns an empty array when the search term is empty' do
@@ -85,7 +85,7 @@ describe Video do
 
         refresh_index
 
-        expect(Video.search("")).to eq([])
+        expect(Video.search("").records.to_a).to eq([])
       end
 
       it 'returns an array with one video for title case insensitive match' do
@@ -94,7 +94,7 @@ describe Video do
 
         refresh_index
 
-        expect(Video.search("fringe")).to eq([fringe])
+        expect(Video.search("fringe").records.to_a).to eq([fringe])
       end
 
       it 'returns an array of many videos for title match' do
@@ -103,7 +103,7 @@ describe Video do
 
         refresh_index
 
-        expect(Video.search("fringe")).to match_array([fringe, fringe_science])
+        expect(Video.search("fringe").records.to_a).to match_array([fringe, fringe_science])
       end
     end
 
@@ -114,7 +114,7 @@ describe Video do
 
         refresh_index
 
-        expect(Video.search('fringe')).to match_array([fringe, friends])
+        expect(Video.search('fringe').records.to_a).to match_array([fringe, friends])
       end
     end
 
@@ -127,7 +127,7 @@ describe Video do
 
         refresh_index
 
-        expect(Video.search('Star Wars')).to match_array([star_wars_e_1, star_wars_e_2])
+        expect(Video.search('Star Wars').records.to_a).to match_array([star_wars_e_1, star_wars_e_2])
       end
     end
   end
