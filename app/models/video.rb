@@ -24,6 +24,7 @@ class Video < ActiveRecord::Base
   end
 
   def self.search(term)
-    __elasticsearch__.search(term).records.to_a
+    response = __elasticsearch__.search query: { multi_match: { query: term, fields: ['title', 'description'], operator: 'and' } }
+    response.records.to_a
   end
 end

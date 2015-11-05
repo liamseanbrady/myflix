@@ -117,5 +117,18 @@ describe Video do
         expect(Video.search('fringe')).to match_array([fringe, friends])
       end
     end
+
+    context 'with multiple words matching' do
+      it 'returns an array of videos where two words match the title' do
+        star_wars_e_1 = Fabricate(:video, title: 'Star Wars: Episode 1')
+        star_wars_e_2 = Fabricate(:video, title: 'Star Wars: Episode 2')
+        bride_wars = Fabricate(:video, title: 'Bride Wars')
+        star_trek = Fabricate(:video, title: 'Star Trek')
+
+        refresh_index
+
+        expect(Video.search('Star Wars')).to match_array([star_wars_e_1, star_wars_e_2])
+      end
+    end
   end
 end
