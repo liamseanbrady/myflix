@@ -12,7 +12,7 @@ describe VideoDecorator do
     it 'returns the average rating out of 5.0 with existing reviews' do
       fringe = Fabricate(:video)
       Fabricate(:review, rating: 4, video: fringe)
-      fringe_decorator = VideoDecorator.decorate(fringe)
+      fringe_decorator = VideoDecorator.decorate(fringe.reload)
 
       expect(fringe_decorator.rating).to eq('4.0/5.0')
     end

@@ -54,7 +54,7 @@ describe Video do
       fringe = Fabricate(:video)
       review = Fabricate(:review, rating: 5, video: fringe)
 
-      expect(fringe.rating).to eq(5.0)
+      expect(fringe.reload.rating).to eq(5.0)
     end
 
     it 'returns the average rating of two videos to one decimal place' do
@@ -62,7 +62,7 @@ describe Video do
       Fabricate(:review, rating: 5, video: fringe)
       Fabricate(:review, rating: 4, video: fringe)
 
-      expect(fringe.rating).to eq(4.5)
+      expect(fringe.reload.rating).to eq(4.5)
     end
   end
   describe '.search', :elasticsearch do
@@ -128,6 +128,29 @@ describe Video do
         refresh_index
 
         expect(Video.search('Star Wars').records.to_a).to match_array([star_wars_e_1, star_wars_e_2])
+      end
+    end
+    
+    context "with title, description and reviews" do
+      it 'returns an an empty array for no match with reviews option' do
+        star_wars = Fabricate(:video, title: "Star Wars")
+        batman    = Fabricate(:video, title: "Batman")
+        batman_review = Fabricate(:review, video: batman, content: "such a star movie!")
+
+        refresh_index
+
+        expect(Video.search("no_match", reviews: true).records.to_a).to eq([])
+      end
+
+      it 'returns an array of many videos with relevance title > description > review' do
+        star_wars = Fabricate(:video, title: "Star Wars")
+        about_sun = Fabricate(:video, description: "the sun is a star!")
+        batman    = Fabricate(:video, title: "Batman")
+        batman_review = Fabricate(:review, video: batman, content: "such a star movie!")
+
+        refresh_index
+
+        expect(Video.search("star", reviews: true).records.to_a).to eq([star_wars, about_sun, batman])
       end
     end
   end
