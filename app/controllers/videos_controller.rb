@@ -13,4 +13,15 @@ class VideosController < ApplicationController
   def search
     @results = Video.search_by_title(params[:search_term])
   end
+
+  def advanced_search
+    respond_to do |format|
+      format.html
+      format.js do
+        @videos = Video.search(params[:query]).records.to_a
+        @result_count = @videos.count
+        render layout: false, content_type: 'text/javascript'
+      end
+    end
+  end
 end
