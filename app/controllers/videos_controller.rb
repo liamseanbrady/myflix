@@ -18,7 +18,13 @@ class VideosController < ApplicationController
     respond_to do |format|
       format.html
       format.js do
-        @videos = Video.search(params[:query]).records.to_a
+        query = params[:query]
+        options = {
+          reviews: params[:reviews],
+          rating_from: params[:rating_from],
+          rating_to: params[:rating_to]
+        }
+        @videos = Video.search(query, options).records.to_a
         @result_count = @videos.count
         render layout: false, content_type: 'text/javascript'
       end
