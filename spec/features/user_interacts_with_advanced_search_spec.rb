@@ -50,7 +50,7 @@ feature "User interacts with advanced search", :js, :elasticsearch do
     expect(page).not_to have_content "Star Wars: Episode 2"
   end
 
-  scenario "user filters search results with average rating", driver: :selenium do
+  scenario "user filters search results with average rating" do
     within(".advanced_search") do
       fill_in "query", with: "Star"
       check "Include Reviews"
