@@ -26,25 +26,41 @@ class Video < ActiveRecord::Base
       only: [:title, :description],
       include: { 
         reviews: { only: [:content] } 
-      }
+      },
+      methods: :rating
     )
   end
 
   def self.search(term, options = {})
     search_definition = {
       query: {
-        multi_match: {
-          query: term,
-          fields: ["title^100", "description^50"],
-          operator: "and"
+        filtered: {
+          query: {
+            multi_match: {
+              query: term,
+              fields: ["title^100", "description^50"],
+              operator: "and"
+            }
+          }
         }
       }
     }
 
     if term.present? && options[:reviews].present?
-      search_definition[:query][:multi_match][:fields] << "reviews.content"
+      search_definition[:query][:filtered][:query][:multi_match][:fields] << "reviews.content"
     end
-    
+
+    if options[:rating_from].present? || options[:rating_to].present?
+      search_definition[:filter] = {
+        range: {
+          rating: {
+            gte: (options[:rating_from] if options[:rating_from]),
+            lte: (options[:rating_to] if options[:rating_to])
+          }
+        }
+      }
+    end
+
     __elasticsearch__.search search_definition
   end
 end
