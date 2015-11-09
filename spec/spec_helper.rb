@@ -86,6 +86,11 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/v/3-0/docs
   config.infer_spec_type_from_file_location!
 
+  # If an :elasticsearch tag is given, then create an index in elasticsearch for the given models
+  config.before(:each, elasticsearch: true) do
+    Video.__elasticsearch__.create_index! force: true
+  end
+
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
   end
